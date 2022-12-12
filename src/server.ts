@@ -1,5 +1,6 @@
 import chalk from 'chalk'
 import app from './app'
+import { APP_ORIGIN, PORT } from './config/app'
 import { connectDB } from './config/db'
 
 const server = () => {
