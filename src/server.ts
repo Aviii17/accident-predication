@@ -1,39 +1,33 @@
-import chalk from 'chalk'
+import dotenv from 'dotenv'
+dotenv.config()
+import mongoose from 'mongoose'
 import app from './app'
 import { APP_ORIGIN, PORT } from './config/app'
 import { connectDB } from './config/db'
+import { csvImport } from './helper/csvImport'
 
-const server = () => {
-  let color: any
-  switch (process.env.NODE_ENV) {
-    case 'production':
-      color = chalk.yellow
-      break
-
-    default:
-      color = chalk.blue
-      break
-  }
-
+const server = async() => {
+ 
   try {
     connectDB()
 
-    const server = app.listen(PORT, () => {
+    const server =  app.listen(PORT,async() => {
       console.log(
-        color.bold(
+        
           `✅ Server running on ${APP_ORIGIN} in ${process.env.NODE_ENV} mode`
-        )
+        
       )
+      await csvImport()
     })
 
     mongoose.connection.on('disconnected', () => {
-      console.log(chalk.red.bold(`❌ Database Disconnected...`))
+     console.log((`❌ Database Disconnected...`))
     })
 
     process.on('SIGINT', () => {
       server.close(async () => {
         await mongoose.connection.close(false)
-        console.log(chalk.red.bold('❌ Server is closed...'))
+         console.log(('❌ Server is closed...'))
         process.exit(0)
       })
     })
@@ -41,12 +35,12 @@ const server = () => {
     process.on('SIGTERM', () => {
       server.close(async () => {
         await mongoose.connection.close(false)
-        console.log(chalk.red.bold('❌ Server is closed...'))
+         console.log(('❌ Server is closed...'))
         process.exit(0)
       })
     })
   } catch (err) {
-    console.error(chalk.red.bold(err, 'Err, Something went wrong!'))
+     console.error(err, 'Err, Something went wrong!')
   }
 }
 
