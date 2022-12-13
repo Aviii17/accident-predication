@@ -1,6 +1,8 @@
 import express from 'express'
 import mainController from '../controller'
-const router= express.Router()
+const router = express.Router()
 
-router.post('/read-csv', mainController.post)
+router.get('/accidents', mainController.search)
+router.get('/accidents/:id', mainController.singleAccident)
+
 export default router
