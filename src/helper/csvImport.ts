@@ -30,6 +30,7 @@ export const csvImport = async () => {
         weather_condition: item.weather_condition || null,
         light_condition: item.light_condition || null,
         visibility: item.visibility || null,
+        causes: item.causes || null,
       }
     })
 
